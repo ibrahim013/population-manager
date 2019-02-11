@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - 11.0.0
+
+before_install:
+- travis_wait npm install
+
+cache:
+- node_modules
+
+script:
+- yarn test
