@@ -1,13 +1,15 @@
 import express from 'express';
 
-import RandomNumberGen from '../controller/index';
+import PopulationManager from '../controller/index';
 import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
-const { generateToken, generateNumber, getAllNumber } = RandomNumberGen;
+const { signUp, login, createLocations, editLocations, getLocation, deleteLocations } = PopulationManager;
 
-router.get('/token', generateToken);
-router.post('/generate', verifyToken, generateNumber);
-router.get('/numbers', verifyToken, getAllNumber);
-
+router.post('/signup', signUp);
+router.post('/login', login);
+router.post('/createlocation', verifyToken, createLocations);
+router.put('/locations/:id', verifyToken, editLocations);
+router.get('/locations', verifyToken, getLocation);
+router.delete('/locations/:id', verifyToken, deleteLocations);
 export default router;

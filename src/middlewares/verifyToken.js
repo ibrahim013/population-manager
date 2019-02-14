@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const jwtSecret = process.env.SECRET_TOKEN;
+const jwtSecret = process.env.KEY;
 
 /**
  * @description: verifies user`s token
