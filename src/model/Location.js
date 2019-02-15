@@ -18,10 +18,10 @@ const LocationSchema = new Schema({
   },
   sex: {
     male: {
-      type: String,
+      type: Number,
     },
     female: {
-      type: String,
+      type: Number,
     },
   },
   createdAt: { type: Date, default: Date.now },

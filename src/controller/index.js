@@ -37,7 +37,7 @@ export default class PopulationManager {
           newUser.password = hash;
           newUser
             .save()
-            .then(user => res.status(200).json({
+            .then(user => res.status(201).json({
               userId: user._id,
               userName: user.name,
               email: user.email,
@@ -96,7 +96,7 @@ export default class PopulationManager {
   }
 
   /**
-   * Routes: POST: /api/v1/createlocations
+   * Routes: POST: /api/v1/createlocation
    * @description create location
    * @param {object} req
    * @param {object} res
@@ -116,13 +116,11 @@ export default class PopulationManager {
             msg: 'Location already exist',
           });
         }
-        const male = (req.body.sex === 'male') ? 'male' : '';
-        const female = (req.body.sex === 'female') ? 'female' : '';
         const newLocation = new Locations({
           location: locations,
           sex: {
-            male,
-            female,
+            male: req.body.male,
+            female: req.body.female,
           },
           creator: {
             id: req.decoded.id,
@@ -158,18 +156,16 @@ export default class PopulationManager {
     if (!isValid) {
       return res.status(400).json(errors);
     }
-    const male = (req.body.sex === 'male') ? 'male' : '';
-    const female = (req.body.sex === 'female') ? 'female' : '';
     Locations.findOneAndUpdate({ _id: req.params.id },
       {
         $set: { location: locations },
         sex: {
-          male,
-          female,
+          male: req.body.sex.male,
+          female: req.body.sex.female,
         },
       }, { upsert: true }).then(updatedLocation => res.status(200).json({
       status: 'success',
-      message: 'Location updated successfully',
+      msg: 'Location updated successfully',
       updatedLocation: {
         location: updatedLocation.location,
         sex: {

@@ -4,7 +4,14 @@ import PopulationManager from '../controller/index';
 import verifyToken from '../middlewares/verifyToken';
 
 const router = express.Router();
-const { signUp, login, createLocations, editLocations, getLocation, deleteLocations } = PopulationManager;
+const {
+  signUp,
+  login,
+  createLocations,
+  editLocations,
+  getLocation,
+  deleteLocations,
+} = PopulationManager;
 
 router.post('/signup', signUp);
 router.post('/login', login);

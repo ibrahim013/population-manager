@@ -1,21 +1,27 @@
 import chai from 'chai';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import server from '../server/server';
+import userData from './mockData';
+import Keys from '../../config/keys';
 
-
+dotenv.config();
 const request = require('supertest');
 
 const expect = chai.expect;
 
-describe('Random number generator', () => {
-  let token;
+const db = Keys.mongo_URI_TEST;
+describe('Population Management System ', () => {
+  const { user } = userData;
   before((done) => {
-    request(server)
-      .get('/api/v1/token?admin=admin')
-      .set('Content-Type', 'application/json')
-      .end((err, res) => {
-        token = res.body.token;
-        done();
-      });
+    mongoose.createConnection(
+      db,
+      { useNewUrlParser: true }, () => {
+        mongoose.connection.db.dropDatabase(() => {
+          done();
+        });
+      },
+    );
   });
 
   it('should respond with a 404', (done) => {
@@ -31,90 +37,60 @@ describe('Random number generator', () => {
       .expect(200);
     done();
   });
-
-  it('should allow admin to get token', (done) => {
+  it('should signup a new user', (done) => {
     request(server)
-      .get('/api/v1/token?admin=admin')
+      .post('/api/v1/signup')
       .set('Content-Type', 'application/json')
+      .send(user.staticUser)
       .end((err, res) => {
-        expect(200);
-        expect(res.body).to.have.a.property('success');
-        expect(res.body).to.have.a.property('token');
+        expect(res.status).to.eql(201);
+        expect(res.body.status).to.eql('success');
         done();
       });
   });
-
-  it('should return an error if no valid token is passed', (done) => {
+  it('should respond with an error message when input are not entered', (done) => {
     request(server)
-      .get('/api/v1/numbers')
+      .post('/api/v1/signup')
       .set('Content-Type', 'application/json')
+      .send(user.signUpErr)
       .end((err, res) => {
-        expect(403);
-        expect(res.body).to.have.a.property('error');
+        expect(res.status).to.eql(400);
+        expect(res.body).to.be.an('object');
         done();
       });
   });
-
-  it('should return the number count if token is passed', (done) => {
+  it('should respond with an error message when using an already registered email', (done) => {
     request(server)
-      .get('/api/v1/numbers')
+      .post('/api/v1/signup')
       .set('Content-Type', 'application/json')
-      .set('x-access-token', token)
+      .send(user.existingEmail)
       .end((err, res) => {
-        expect(200);
-        expect(res.body).to.have.a.property('msg').to.equal('success');
+        expect(res.status).to.eql(400);
+        expect(res.body.email).to.eql('Email already exist');
         done();
       });
   });
-  it('should return an error if no admin param is passed', (done) => {
+  it('should be able to login successfuly', (done) => {
     request(server)
-      .get('/api/v1/token?admin=random')
+      .post('/api/v1/login')
       .set('Content-Type', 'application/json')
+      .send(user.signIn)
       .end((err, res) => {
-        expect(401);
-        expect(res.body).to.have.a.property('error')
-          .to.equal('Unauthorized user contact system administrator');
+        expect(res.status).to.eql(200);
+        expect(res.body.token).to.be.a('string');
+        expect(res.body.status).to.be.eql('success');
         done();
       });
   });
-
-  it('should return an error if value inputed is > 2000', (done) => {
+  it('should respond with an error message if a wrong email or password is entered', (done) => {
     request(server)
-      .post('/api/v1/generate')
+      .post('/api/v1/login')
       .set('Content-Type', 'application/json')
-      .set('x-access-token', token)
-      .send({ numGen: 3000 })
+      .send(user.incorrectCrendentials)
       .end((err, res) => {
-        expect(400);
-        expect(res.body).to.have.a.property('msg')
-          .to.equal('you can not generate more than 2000 numbers at a go');
-        done();
-      });
-  });
-
-  it('should return an error if NAN is passed', (done) => {
-    request(server)
-      .post('/api/v1/generate')
-      .set('Content-Type', 'application/json')
-      .set('x-access-token', token)
-      .send({ numGen: 'TIA' })
-      .end((err, res) => {
-        expect(400);
-        expect(res.body).to.have.a.property('msg')
-          .to.equal('Only numbers are allowed here');
-        done();
-      });
-  });
-
-  it('should write to memory', (done) => {
-    request(server)
-      .post('/api/v1/generate')
-      .set('Content-Type', 'application/json')
-      .set('x-access-token', token)
-      .send({ numGen: 10 })
-      .end((err, res) => {
-        expect(201);
-        expect(res.body).to.have.a.property('dataHold');
+        expect(res.status).to.eql(400);
+        expect(res.body.msg).to.eql('email or password is Incorrect');
+        expect(res.body.status).to.be.eql('fail');
         done();
       });
   });
