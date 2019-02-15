@@ -27,7 +27,7 @@ Start application with `yarn start`
 |/api/v1/locations/:id|	DELETE |	Delete a location by id|
 
 ### Documentation
-Visit (API DOC)[https://documenter.getpostman.com/view/4905727/S11BxgzP] for API documentation
+Visit [API DOC](https://documenter.getpostman.com/view/4905727/S11BxgzP) for API documentation
 
 ### Technologies
 * MongoDB
