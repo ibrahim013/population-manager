@@ -160,8 +160,8 @@ export default class PopulationManager {
       {
         $set: { location: locations },
         sex: {
-          male: req.body.sex.male,
-          female: req.body.sex.female,
+          male: req.body.male,
+          female: req.body.female,
         },
       }, { upsert: true }).then(updatedLocation => res.status(200).json({
       status: 'success',

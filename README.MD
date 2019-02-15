@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/ibrahim013/population-manager/badge.svg?branch=dev)](https://coveralls.io/github/ibrahim013/population-manager?branch=dev) [![Build Status](https://travis-ci.org/ibrahim013/population-manager.svg?branch=dev)](https://travis-ci.org/ibrahim013/population-manager)
+
 ### Population Management System API
 
 Population Management System is a censors application that stores a list of locations and the total number of residents in each location by gender.
@@ -6,7 +8,7 @@ Population Management System is a censors application that stores a list of loca
 
 Clone the repository `git clone https://github.com/ibrahim013/population-manager.git`
 
-cd into project folder
+cd into project directory
 
 Install packages by runing `yarn`
 
@@ -25,7 +27,7 @@ Start application with `yarn start`
 |/api/v1/locations/:id|	DELETE |	Delete a location by id|
 
 ### Documentation
-Visit API DOC for API documentation
+Visit (API DOC)[https://documenter.getpostman.com/view/4905727/S11BxgzP] for API documentation
 
 ### Technologies
 * MongoDB
