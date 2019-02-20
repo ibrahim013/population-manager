@@ -13,9 +13,14 @@ const validateLocationInput = (data) => {
   if (Validator.isEmpty(data.location)) {
     errors.location = 'location can not be empty';
   }
-
+  if (!Validator.isNumeric(data.male)) {
+    errors.male = 'only numbers are allowed ';
+  }
   if (Validator.isEmpty(data.male)) {
     errors.male = 'Number of male can not be empty';
+  }
+  if (!Validator.isNumeric(data.female)) {
+    errors.male = 'only numbers are allowed ';
   }
   if (Validator.isEmpty(data.female)) {
     errors.female = 'number of female can not be empty';

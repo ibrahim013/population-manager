@@ -18,5 +18,6 @@ router.post('/login', login);
 router.post('/createlocation', verifyToken, createLocations);
 router.put('/locations/:id', verifyToken, editLocations);
 router.get('/locations', verifyToken, getLocation);
+router.get('/locations/:id', verifyToken, getLocation);
 router.delete('/locations/:id', verifyToken, deleteLocations);
 export default router;

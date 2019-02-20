@@ -184,11 +184,15 @@ export default class PopulationManager {
    * @return {void}
    */
   static getLocation(req, res) {
-    if (req.query.id) {
-      Locations.findOne({ _id: req.query.id.trim() }).then(location => res.status(200).json({
+    if (req.params.id) {
+      const userId = (req.params.id).trim();
+      Locations.findOne({ _id: userId }).then(location => res.status(200).json({
         response: {
           _id: location._id,
           name: location.location,
+          totalNumberOfMale: location.sex.male,
+          totalNumberOfFmale: location.sex.female,
+          totalPoulation: Number(location.sex.male + location.sex.female),
           status: 'success',
         },
       })).catch(() => res.status(404).json({ msg: 'Invalid message location', status: 'fail' }));
@@ -196,10 +200,20 @@ export default class PopulationManager {
     Locations.estimatedDocumentCount({}, (err, isCount) => {
       const count = isCount;
       Locations.find({})
-        .then(locations => res.status(200).json({
-          locations,
-          count,
-        })).catch(() => res.status(500).json({ msg: 'oops something went wrong' }));
+        .then((locations) => {
+          const individualLocation = locations.map(location => ({
+            _id: location._id,
+            name: location.location,
+            totalNumberOfMale: location.sex.male,
+            totalNumberOfFmale: location.sex.female,
+            totalPoulation: Number(location.sex.male + location.sex.female),
+            status: 'success',
+          }));
+          return res.status(200).json({
+            response: individualLocation,
+            count,
+          });
+        }).catch(() => res.status(500).json({ msg: 'oops something went wrong' }));
     });
   }
 

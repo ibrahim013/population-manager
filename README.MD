@@ -22,7 +22,8 @@ Start application with `yarn start`
 |/api/v1/signup|	POST |	signup a new user |
 |/api/v1/login |	POST |	login a registered|
 |/api/v1/createlocation|	POST|	Create a new location with male and female population|
-|/api/v1/locations|	GET	| Get a location by id or locations |
+|/api/v1/locations|	GET	| Get all locations |
+|/api/v1/locations/:id|	GET	| Get a location by id |
 |/api/v1/locations/:id|	PUT |	Update a location |
 |/api/v1/locations/:id|	DELETE |	Delete a location by id|
 
