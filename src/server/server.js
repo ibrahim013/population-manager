@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // database connection
-mongoose.connect(db, { useNewUrlParser: true })
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true  })
   .then(() => console.log('database connected sucessfully'))
   .catch(err => console.log(err));
 

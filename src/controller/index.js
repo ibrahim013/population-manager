@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import User from '../model/User';
 import Locations from '../model/Location';
+import remoteData from '../model/data'
 import Keys from '../../config/keys';
 import validateSignUpInput from '../utill/validators/singup';
 import validateLoginInput from '../utill/validators/login';
@@ -238,4 +239,10 @@ export default class PopulationManager {
       }
     }).catch(() => res.status(401).json({ msg: 'Unathorized, invalid location identity', status: 'fail' }));
   }
+
+  static sensorData(req, res) {
+    remoteData.create(req.body).then((doc) =>res.send({status: "success", data: doc})
+    ).catch(error =>  res.send({status: "fail", error}))
+    
+    }
 }
